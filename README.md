@@ -1,6 +1,6 @@
 # Eclipse Twitter Tracker:
 
-Inspired by this [Google Trends map](wapo.st/2vkgIBv) of eclipse searches in the week leading up to the "Great American Eclipse" of 2017, I decided to see if I could track the path of the moon's shadow as it crossed the continental United States by using only Twitter mentions of the eclipse. 
+Inspired by [this Google Trends map](wapo.st/2vkgIBv) of eclipse searches in the week leading up to the "Great American Eclipse" of 2017, I decided to see if I could track the path of the moon's shadow as it crossed the continental United States by using only Twitter mentions of the eclipse. 
 
 ### Intro - *August 18, 2017*:
 
