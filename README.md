@@ -10,7 +10,7 @@ The rate-limiting of the [Twitter REST API](https://dev.twitter.com/rest/public)
 
 ### UPDATE - *September 4, 2017*:
 
-Success! The data set ([eclipsefile1.json](https://github.com/chrismbryant/eclipse-twitter-tracker/blob/master/eclipsefile1.json)) is smaller than expected, but it looks like the program did what it was supposed to do! 
+Success! The data set ([eclipsefile1.json](https://github.com/chrismbryant/eclipse-twitter-tracker/tree/master/Twitter%20Data)) is smaller than expected, but it looks like the program did what it was supposed to do! 
 
 Now home from my extended eclipse-trip, I am beginning the process of figuring out how to process and map my data. I just posted the [EclipseTracker.ipynb](https://github.com/chrismbryant/eclipse-twitter-tracker/blob/master/EclipseTracker.ipynb) Jupyter Notebook which collected data from Twitter's streaming API while I was away. It appears that roughly 1M tweets in the 6-hour data acquisition period mentioned either the word "eclipse" or "sun," of which 20,933 were geo-tagged. A [quick scatter plot](https://github.com/chrismbryant/eclipse-twitter-tracker/blob/master/Images/myfirsteclipseplot.png) of each of these geo-tagged points on an (X,Y) = (Longitude, Latitude) chart reaveals an image which strikingly appears to match the population density of the United States, but with an added faint trail of points crossing the country in the path of totality.
 
