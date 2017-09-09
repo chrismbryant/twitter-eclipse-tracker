@@ -16,7 +16,7 @@ Now home from my extended eclipse-trip, I am beginning the process of figuring o
 
 Moving forward, I will work to bin these points by county (probably using TopoJSON to create the county map) and normalize each measurement by dividing the tweet-count by the county population. Hopefully, this process will accent the path of the eclipse amidst the Twitter noise. 
 
-Some other things took into:
+#### Some other things took into:
  * using the [Albers projection](https://en.wikipedia.org/wiki/Albers_projection) to accurately preserve county area;
  * obtaining and plotting the [NASA eclipse path data](https://eclipse.gsfc.nasa.gov/SEpath/SEpath2001/SE2017Aug21Tpath.html); 
  * creating a time-series of images to display shadow movement.  
