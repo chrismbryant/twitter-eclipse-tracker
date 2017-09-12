@@ -12,24 +12,28 @@ The rate-limiting of the [Twitter REST API](https://dev.twitter.com/rest/public)
 
 Success! The data set ([eclipsefile1.json](https://github.com/chrismbryant/eclipse-twitter-tracker/tree/master/Twitter%20Data)) is smaller than expected, but it looks like the program did what it was supposed to do! 
 
-Now home from my extended eclipse-trip, I am beginning the process of figuring out how to process and map my data. I just posted the [EclipseTracker.ipynb](https://github.com/chrismbryant/eclipse-twitter-tracker/blob/master/EclipseTracker.ipynb) Jupyter Notebook which collected data from Twitter's streaming API while I was away. It appears that roughly 1M tweets in the 6-hour data acquisition period mentioned either the word "eclipse" or "sun," of which 20,933 were geo-tagged. A [quick scatter plot](https://github.com/chrismbryant/eclipse-twitter-tracker/blob/master/Images/myfirsteclipseplot.png) of each of these geo-tagged points on an (X,Y) = (Longitude, Latitude) chart reaveals an image which strikingly appears to match the population density of the United States, but with an added faint trail of points crossing the country in the path of totality.
+Now home from my extended eclipse-trip, I am beginning the process of figuring out how to process and map my data. I just posted the [EclipseTracker.ipynb](https://github.com/chrismbryant/eclipse-twitter-tracker/blob/master/EclipseTracker.ipynb) Jupyter Notebook which collected data from Twitter's streaming API while I was away. It appears that roughly 1M tweets in the 6-hour data acquisition period mentioned either the word "eclipse" or "sun," of which 20,933 were geo-tagged. A [quick scatter plot](https://github.com/chrismbryant/eclipse-twitter-tracker/blob/master/Images/myfirsteclipseplot.png) of each of these geo-tagged points on an (X, Y) = (Longitude, Latitude) chart reaveals an image which strikingly appears to match the population density of the United States, but with an added faint trail of points crossing the country in the path of totality.
 
 Moving forward, I will work to bin these points by county (probably using TopoJSON to create the county map) and normalize each measurement by dividing the tweet-count by the county population. Hopefully, this process will accent the path of the eclipse amidst the Twitter noise. 
 
-#### Some other things took into:
+#### *Some other things took into*:
  * using the [Albers projection](https://en.wikipedia.org/wiki/Albers_projection) to accurately preserve county area;
  * obtaining and plotting the [NASA eclipse path data](https://eclipse.gsfc.nasa.gov/SEpath/SEpath2001/SE2017Aug21Tpath.html); 
  * creating a time-series of images to display shadow movement.  
  
  ### UPDATE - *September 12, 2017*:
  
-Since my last update, I have created the beginnings of an interactive [choropleth](https://en.wikipedia.org/wiki/Choropleth_map) of the United States to visualize the Twitter data I collected. 
+Since my last update, I have created the beginnings of an interactive [choropleth](https://en.wikipedia.org/wiki/Choropleth_map) of the United States to visualize the Twitter data I collected. My workflow, outlined below, has been divided into two categories: data processing (done mainly in Python) and data visualization (done mainly in JavaScript).  
 
-#### Data processing:
+#### *Data processing*:
 
+Because of my desire to plot my data as a county choropleth, I faced two main challenges: determining which county each tweet was sent from based on its geographic coordinates, and making those county labels compatible with whatever system I would use to plot those counties. I quickly learned that each United States county has a unique 5-digit numerical identifier called a [FIPS county code](https://en.wikipedia.org/wiki/FIPS_county_code), the first 2 digits of which represent the US state, territory, region, [etc.] (https://en.wikipedia.org/wiki/List_of_U.S._state_abbreviations), and the next 3 of which represent the county or county-equivalent we're identifying within that region.
 
-#### Data visualization:
-After trying to create my map with a variety of Python tools (e.g. Plotly, Shapely, Basemap) with little success, I decided that using the "Data-Driven Documents" JavaScript Library [D3.js](https://d3js.org/) would be my best path forward. This library is capable of building beautiful highly-customizable interactive visualizations (just look at some of [these examples](https://github.com/d3/d3/wiki/Gallery)!), has great [GeoJSON](http://geojson.org/)/[TopoJSON](https://github.com/topojson/topojson) support, and already has a large amount of material online with viewable source code. The last item on that list has been incredibly important, since, before I started this project, I did not know *any* [JavaScript](https://en.wikipedia.org/wiki/JavaScript), [HTML](https://en.wikipedia.org/wiki/HTML), [CSS](https://en.wikipedia.org/wiki/Cascading_Style_Sheets), or [XML](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics)! After a day working through the [Codecademy courses](https://www.codecademy.com/learn) on JavaScript and HTML, I transitioned into climbing up the steep learning curve of D3 by trying to replicate the results of existing data-bound choropleths (which was made extra difficult because while I used [d3.v4](https://github.com/d3/d3/blob/master/CHANGES.md), much of the example material used d3.v3). 
+GeoJSON/TopoJSON data
+
+#### *Data visualization*:
+
+After trying to create my map with a variety of Python tools (e.g. Plotly, Shapely, Basemap) with little success, I decided that using the "Data-Driven Documents" JavaScript Library [D3.js](https://d3js.org/) would be my best path forward. This library is capable of building beautiful highly-customizable interactive visualizations (just look at some of [these examples](https://github.com/d3/d3/wiki/Gallery)!), has great [GeoJSON](http://geojson.org/)/[TopoJSON](https://github.com/topojson/topojson) support, and already has a large amount of material online with viewable source code. The last item on that list has been incredibly important, since, before I started this project, I did not know *any* [JavaScript](https://en.wikipedia.org/wiki/JavaScript), [HTML](https://en.wikipedia.org/wiki/HTML), [CSS](https://en.wikipedia.org/wiki/Cascading_Style_Sheets), or [XML](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics)! After a day working through the [Codecademy] (https://www.codecademy.com/learn) courses on JavaScript and HTML, I transitioned into climbing up the steep learning curve of D3 by trying to replicate the results of existing data-bound choropleths (which was made extra difficult because while I used [d3.v4](https://github.com/d3/d3/blob/master/CHANGES.md), much of the example material used d3.v3). 
 
 Eventually, thanks in large part to [this tutorial](https://www.youtube.com/watch?v=suNs5p0IxWk) by Venkata Karthik Thota, I got my Twitter data choropleth up and running. 
 
