@@ -27,7 +27,7 @@ Since my last update, I have created the beginnings of an interactive [choroplet
 
 #### *Data processing*:
 
-Because of my desire to plot my data as a county choropleth, I faced two main challenges: determining which county each tweet was sent from based on its geographic coordinates, and making those county labels compatible with whatever system I would use to plot those counties. I quickly learned that each United States county has a unique 5-digit numerical identifier called a [FIPS county code](https://en.wikipedia.org/wiki/FIPS_county_code), the first 2 digits of which represent the US state, territory, region, [etc.] (https://en.wikipedia.org/wiki/List_of_U.S._state_abbreviations), and the next 3 of which represent the county or county-equivalent we're identifying within that region.
+Because of my desire to plot my data as a county choropleth, I faced two main challenges: determining which county each tweet was sent from based on its geographic coordinates, and making those county labels compatible with whatever system I would use to plot those counties. I quickly learned that each United States county has a unique 5-digit numerical identifier called a [FIPS county code](https://en.wikipedia.org/wiki/FIPS_county_code), the first 2 digits of which represent the US state, territory, region, [etc.](https://en.wikipedia.org/wiki/List_of_U.S._state_abbreviations), and the next 3 of which represent the county or county-equivalent we're identifying within that region.
 
 GeoJSON/TopoJSON data
 
