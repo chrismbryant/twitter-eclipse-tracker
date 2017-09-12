@@ -6,7 +6,7 @@ Inspired by [this Google Trends map](https://www.washingtonpost.com/news/wonk/wp
 
 I am working on writing a program to mine Twitter data from August 21, 2017 (about 9am PDT to 3pm EDT) for mentions of the solar eclipse to see if by using frequency of mentions alone, we can track the path of the moon's shadow throughout the day. Using this data, I hope to generate a changing map of the United States with counties shaded according to proportional tweet volume referencing the eclipse. I will also compare this path to the true path and see if there are any interesting conclusions to be made (Twitter-mentions lagging behind or anticipating the eclipse, Twitter-shadow-area compared to the actual region of totality, tweet content of partial eclipse experiencers vs total eclipse experiencers, etc.)
 
-The rate-limiting of the [Twitter REST API](https://dev.twitter.com/rest/public) is too restricting for the type of large data-acquisition this project requires, so I will try to write up and test a program which will use [Twitter's Streaming API](https://dev.twitter.com/streaming/overview) to collect data live during the eclipse. Since I will have no internet access in [Mitchell, OR](https://www.google.com/maps/place/Mitchell+City+Park/@44.5701282,-120.1627358,15z/data=!4m13!1m7!3m6!1s0x54bc0787dd85965b:0x980ceb3d5a2dd9d!2sMitchell,+OR+97750!3b1!8m2!3d44.566525!4d-120.153341!3m4!1s0x54bc07886405da39:0xf3137f0b17ba441d!8m2!3d44.5669464!4d-120.1524881) (where I will be viewing the eclipse from), I will leave a computer running the program at home to automatically collect the relevent Tweets. I will not be able to monitor the progress of the program during collection, so I will program in failsafes to ensure that the total data collected as well as the size of each data file does not get too large. Hopefully, I can get it done before I leave for the airport early tomorrow morning.
+The rate-limiting of the [Twitter REST API](https://dev.twitter.com/rest/public) is too restricting for the type of large data-acquisition this project requires, so I will try to write up and test a Python script which will use [Twitter's Streaming API](https://dev.twitter.com/streaming/overview) to collect data live during the eclipse. Since I will have no internet access in [Mitchell, OR](https://www.google.com/maps/place/Mitchell+City+Park/@44.5701282,-120.1627358,15z/data=!4m13!1m7!3m6!1s0x54bc0787dd85965b:0x980ceb3d5a2dd9d!2sMitchell,+OR+97750!3b1!8m2!3d44.566525!4d-120.153341!3m4!1s0x54bc07886405da39:0xf3137f0b17ba441d!8m2!3d44.5669464!4d-120.1524881) (where I will be viewing the eclipse from), I will leave a computer running the program at home to automatically collect the relevent Tweets. I will not be able to monitor the progress of the program during collection, so I will program in failsafes to ensure that the total data collected as well as the size of each data file does not get too large. Hopefully, I can get it done before I leave for the airport early tomorrow morning.
 
 ### UPDATE - *September 4, 2017*:
 
@@ -20,3 +20,17 @@ Moving forward, I will work to bin these points by county (probably using TopoJS
  * using the [Albers projection](https://en.wikipedia.org/wiki/Albers_projection) to accurately preserve county area;
  * obtaining and plotting the [NASA eclipse path data](https://eclipse.gsfc.nasa.gov/SEpath/SEpath2001/SE2017Aug21Tpath.html); 
  * creating a time-series of images to display shadow movement.  
+ 
+ ### UPDATE - *September 12, 2017*:
+ 
+Since my last update, I have created the beginnings of an interactive [choropleth](https://en.wikipedia.org/wiki/Choropleth_map) of the United States to visualize the Twitter data I collected. 
+
+#### Data processing:
+
+
+#### Data visualization:
+After trying to create my map with a variety of Python tools (e.g. Plotly, Shapely, Basemap) with little success, I decided that using the "Data-Driven Documents" JavaScript Library [D3.js](https://d3js.org/) would be my best path forward. This library is capable of building beautiful highly-customizable interactive visualizations (just look at some of [these examples](https://github.com/d3/d3/wiki/Gallery)!), has great [GeoJSON](http://geojson.org/)/[TopoJSON](https://github.com/topojson/topojson) support, and already has a large amount of material online with viewable source code. The last item on that list has been incredibly important, since, before I started this project, I did not know *any* [JavaScript](https://en.wikipedia.org/wiki/JavaScript), [HTML](https://en.wikipedia.org/wiki/HTML), [CSS](https://en.wikipedia.org/wiki/Cascading_Style_Sheets), or [XML](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics)! After a day working through the [Codecademy courses](https://www.codecademy.com/learn) on JavaScript and HTML, I transitioned into climbing up the steep learning curve of D3 by trying to replicate the results of existing data-bound choropleths (which was made extra difficult because while I used [d3.v4](https://github.com/d3/d3/blob/master/CHANGES.md), much of the example material used d3.v3). 
+
+Eventually, thanks in large part to [this tutorial](https://www.youtube.com/watch?v=suNs5p0IxWk) by Venkata Karthik Thota, I got my Twitter data choropleth up and running. 
+
+mapshaper.org
