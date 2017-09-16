@@ -7,7 +7,7 @@
 
     * {
         font-family: 
-            "Myriad Pro Light", "Oswald", Helvetica, sans-serif;
+            "Nunito", "Myriad Pro Light", "Oswald", Helvetica, sans-serif;
         margin: 0;
         padding: 0;
     }
@@ -25,6 +25,11 @@
         width: 100%;
         padding-left: 1%;
 
+    }
+
+    div #footer a {
+        text-decoration: none;
+        target: _blank;
     }
 
     body {
@@ -65,6 +70,7 @@
     <!-- <link rel="stylesheet"  type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.2/css/bulma.min.css"> -->
 
     <!-- D3.js CDN source -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,700" rel="stylesheet">
     <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
     <script src="https://d3js.org/topojson.v2.min.js"></script>
@@ -74,7 +80,7 @@
     <div class="container">
         <!-- Title -->
         <div id="header">
-          <h1 class="title centered">The Great American Eclipse on Twitter: August 21, 2017</h1>
+          <h1 class="title centered">The Great American Eclipse on Twitter: <i>August 21, 2017</i></h1>
         </div>
         <div id="image">
             <svg> 
@@ -87,7 +93,7 @@
 
         <!-- Info -->
         <div id="footer">
-            <p><b>Created by:</b> <a href="https://github.com/chrismbryant">Christopher M. Bryant</a>, 2017</br></p>
+            <p><b>Created by:</b> <a href="https://github.com/chrismbryant" targer="_blank">Christopher M. Bryant</a>, 2017</br></p>
             <p><i>(with data collected from <a href="https://dev.twitter.com/streaming/overview" target="_blank">Twitter's Streaming API</a>, <a href="https://eclipse.gsfc.nasa.gov/SEpath/SEpath2001/SE2017Aug21Tpath.html" target="_blank">NASA</a>, and the <a href="https://www.census.gov/data/developers/data-sets/popest-popproj/popest.html" target="_blank">US Census Bureau</a>)</i></p>
         </div>
         <!-- D3 code -->
