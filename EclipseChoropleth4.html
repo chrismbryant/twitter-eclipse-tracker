@@ -13,12 +13,12 @@
     }
 
     div #header {
-        background-color: lightgray;
+        background-color: rgb(210,210,210);
         padding: 1.5% 0;
     }
 
     div #footer {
-        background-color: lightgray;
+        background-color: rgba(210,210,210,0.9);
         padding: 1% 0;
         position: fixed;
         bottom: 0;
@@ -102,7 +102,7 @@
         var header_h = document.getElementById("header").clientHeight;
         var footer_h = document.getElementById("footer").clientHeight;
         var inner_h = window.innerHeight;
-        var image_h = inner_h - header_h - footer_h;
+        var image_h = inner_h - header_h;
 
 
         var svg = d3.select("svg"),
@@ -120,7 +120,7 @@
             zoom_high = 20; // highest zoom magnification
 
         svg.attr("class", "mysvg")
-            .attr("width", width)
+            .attr("width", testwidth)
             .attr("height", testheight)
             .attr("fill", "none")
             .attr("stroke", "none")
@@ -192,23 +192,33 @@
                 "features": eclipseGeoJSON.features
             }
 
+            // Custom translation projection, since our TopoJSON file appears to already encoded with Albers USA projection. Noramlly, we would set our corresponding projection to "null", but since we want to more precisely position the map in svg, we'll need to apply some translations. (See: https://bl.ocks.org/mbostock/5663666)
 
-            // Set map projection for geography. Here, the projection is set to "null",
-            // since our TopoJSON file already the Albers projection encoded into it (?).
+            function trans(dx, dy) {
+              return d3.geoTransform({
+                point: function(x, y) {
+                  this.stream.point(x + dx, y + dy);
+                }
+              });
+            }
+
+            var x_shift = (testwidth-960)/2,
+                y_shift = (testheight-680)/2;
+
             var geoPath = d3.geoPath()
-                .projection(null)
+                .projection(trans(x_shift, y_shift));
 
             // Use the USA Albers projection to map the GeoJSON tweet data
             var proj = d3.geoAlbersUsa()
                 .scale(1280) // [HOW DO WE KNOW WHAT THIS NUMBER IS? I JUST GUESSED.]
                 .translate(
-                    [width*5/12, // width * 5/12
-                    height/2]);  // height/2
+                    [width*5/12 + x_shift, // width * 5/12
+                    height/2 + y_shift]);  // height/2
 
             // This projection won't crop off the ends of the path
             var proj_2 = d3.geoAlbers()
                 .scale(1280)
-                .translate([width*5/12, height/2]);
+                .translate([width*5/12 + x_shift, height/2 + y_shift]);
 
 
             var tweetPath = d3.geoPath()
@@ -217,14 +227,8 @@
             var eclipsePath = d3.geoPath()
                 .projection(proj_2);
             
-            // var x_shift = (testwidth-960)/2,
-            //     y_shift = (testheight-600)/2;
-
             var g = svg.append("g") // Group all the map stuff together
                 .attr("class", "map")
-                // .attr("transform", `translate(${x_shift},${y_shift})`);
-                
-
 
             // ------------------------------- NATION ------------------------------- //
                 // From: https://bl.ocks.org/mbostock/4136647
@@ -498,15 +502,15 @@
 
             // ------------------------- TRANSLUCENT WINDOW ------------------------- //
 
-                var window_w = 3/20*width,
-                    window_c = width-window_w/2;
+                var window_w = 172, // 3/20*width
+                    window_c = testwidth-window_w*3/2;
                 svg.append("g")
                     .attr("class", "window")
                     .append("rect")
-                        .attr("x", width - window_w)
-                        .attr("h", height)
+                        .attr("x", window_c - window_w/2)
+                        .attr("y", 0)
                         .attr("width", window_w)
-                        .attr("height", height)
+                        .attr("height", testheight - footer_h)
                         .attr("fill", "white")
                         .attr("fill-opacity", 0.8)
 
@@ -689,7 +693,7 @@
                     .on("zoom", zoomed));
                 
                 function zoomed() {
-                  g.attr("transform", d3.event.transform);
+                    g.attr("transform", d3.event.transform);
                 }
 
         }
