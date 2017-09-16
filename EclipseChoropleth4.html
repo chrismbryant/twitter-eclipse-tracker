@@ -20,8 +20,16 @@
     div #footer {
         background-color: lightgray;
         padding: 1% 0;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        padding-left: 1%;
+
     }
 
+    body {
+        background-color: black;
+    }
     
     .button:hover {
         fill-opacity: 0.4;
@@ -45,6 +53,7 @@
     svg {
         display: block;
         margin: 0 auto;
+        background-color: white;
     }
 
   </style>
@@ -84,21 +93,29 @@
         <!-- D3 code -->
         <script>
 
+        var header_h = document.getElementById("header").clientHeight;
+        var footer_h = document.getElementById("footer").clientHeight;
+        var inner_h = window.innerHeight;
+        var image_h = inner_h - header_h - footer_h;
+
+
         var svg = d3.select("svg"),
             
             
             // height = 0.4 * window.screen.availHeight,
             // width = 0.4 * window.screen.availWidth,
 
+            testwidth = screen.availWidth,
+            testheight = image_h,
             width = 1152,  // 1152
             height = 600,  // 600
 
-            zoom_low = 1,   // lowest zoom magnification
+            zoom_low = 0.5,   // lowest zoom magnification
             zoom_high = 20; // highest zoom magnification
 
         svg.attr("class", "mysvg")
             .attr("width", width)
-            .attr("height", height)
+            .attr("height", testheight)
             .attr("fill", "none")
             .attr("stroke", "none")
 
@@ -177,31 +194,31 @@
 
             // Use the USA Albers projection to map the GeoJSON tweet data
             var proj = d3.geoAlbersUsa()
-                // .translate([width/2, height/2])
                 .scale(1280) // [HOW DO WE KNOW WHAT THIS NUMBER IS? I JUST GUESSED.]
                 .translate(
                     [width*5/12, // width * 5/12
                     height/2]);  // height/2
 
+            // This projection won't crop off the ends of the path
+            var proj_2 = d3.geoAlbers()
+                .scale(1280)
+                .translate([width*5/12, height/2]);
+
+
             var tweetPath = d3.geoPath()
                 .projection(proj);
 
             var eclipsePath = d3.geoPath()
-                .projection(proj);
+                .projection(proj_2);
             
-            // --------------------------- SVG BACKGROUND --------------------------- //
-
-                var borderPath = svg.append("rect")
-                    .attr("class", "background")
-                    .attr("x", 0)
-                    .attr("y", 0)
-                    .attr("height", height)
-                    .attr("width", width)
-                    .attr("fill", "white")
-                    .attr("pointer-events", "all")
+            // var x_shift = (testwidth-960)/2,
+            //     y_shift = (testheight-600)/2;
 
             var g = svg.append("g") // Group all the map stuff together
                 .attr("class", "map")
+                // .attr("transform", `translate(${x_shift},${y_shift})`);
+                
+
 
             // ------------------------------- NATION ------------------------------- //
                 // From: https://bl.ocks.org/mbostock/4136647
@@ -475,7 +492,6 @@
 
             // ------------------------- TRANSLUCENT WINDOW ------------------------- //
 
-                var overlay_frac = 17/20;
                 var window_w = 3/20*width,
                     window_c = width-window_w/2;
                 svg.append("g")
@@ -670,18 +686,6 @@
                   g.attr("transform", d3.event.transform);
                 }
 
-            // ----------------------------- SVG BORDER ----------------------------- //
-
-                svg.append("rect")
-                    .attr("class", "border")
-                    .attr("x", 0)
-                    .attr("y", 0)
-                    .attr("height", height)
-                    .attr("width", width)
-                    .attr("stroke", "black")
-                    .attr("stroke-width", 1)
-                    .attr("fill", "none");
-            
         }
 
         </script>
