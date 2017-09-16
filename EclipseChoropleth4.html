@@ -5,26 +5,33 @@
 <html>
   <style>
 
+    * {
+        font-family: 
+            "Myriad Pro Light", "Oswald", Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
     div #header {
-        position:absolute;
-        width:100%;
-        height:64px;
-        top:0;
+        background-color: lightgray;
+        padding: 1.5% 0;
     }
 
     div #footer {
-        position:absolute;
-        width:100%;
-        height:64px;
-        bottom:0;
+        background-color: lightgray;
+        padding: 1% 0;
     }
 
-    * {
-        font-family: "Open Sans", "Myriad Pro Light", "Microsoft JhengHei", Helvetica, Arial;
+    
+    .button:hover {
+        fill-opacity: 0.4;
+    }
+
+    .centered {
+        text-align: center;
     }
 
     h1 {
-        text-align: center;
         font-size: 250%;
         font-weight: normal;
     }
@@ -33,14 +40,11 @@
         position: auto;
         font-size: 120%;
         display: inline;
-        text-align: center;
     }
 
     svg {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        display: block;
+        margin: 0 auto;
     }
 
   </style>
@@ -61,7 +65,7 @@
     <div class="container">
         <!-- Title -->
         <div id="header">
-          <h1 class="title has-text-centered">The Great American Eclipse on Twitter: August 21, 2017</h1>
+          <h1 class="title centered">The Great American Eclipse on Twitter: August 21, 2017</h1>
         </div>
         <div id="image">
             <svg> 
@@ -316,7 +320,7 @@
                         .attr("class", "county-pop-path")
                         .attr("d", geoPath)
                         .attr("stroke", border_color)
-                        .attr("stroke-width", 0.05)
+                        .attr("stroke-width", 0.2)
                         .attr("fill", function(d) {
                             var county = eclipseData.get(d.id)[0];
                             return (county ? pop_color(renormdensity[county]) : low_pop_color);
@@ -530,10 +534,14 @@
                     key_xpos = window_c-key_gap/2-key_width, 
                     key_ypos = height/4;
 
+                var color_keys = svg.append("g")
+                    .attr("class", "color-keys")
+
                 // Make color key rectangle and fill with gradient
                 function mkRectGrad(buttonFunction, id, [xpos, ypos]) {
                     color_keys.append("rect")
                         .attr("id", id)
+                        .attr("class", "button")
                         .attr("cursor", "pointer")
                         .on("click", buttonFunction)
                         .attr("x", xpos)
@@ -553,9 +561,6 @@
                 popGrad = linGradElement("pop-grad");
                 setAttr(popGrad, vertAttrs);
                 setColorRange(popGrad, low_pop_color, high_pop_color);
-
-                var color_keys = svg.append("g")
-                    .attr("class", "color-keys")
 
                 mkRectGrad(blueClick, "tweet-grad", [key_xpos, key_ypos]);
                 mkRectGrad(redClick, "pop-grad", 
@@ -580,18 +585,8 @@
                 // This is pretty clunky, but it seems to work...
                 
                 var button = svg.append("g")
-                    .attr("class", "button");
-                
-                function mkbutton(fill, xpos, ypos) {
-                    return button.append("rect")
-                        .attr("cursor", "pointer")
-                        .attr("x", xpos)
-                        .attr("y", ypos)
-                        .attr("height", 40)
-                        .attr("width", 45)
-                        .attr("fill", fill)
-                }
-                
+                    .attr("class", "buttons");
+                                
                 function toggleVis(s, button) {
                     if (button === false) {
                         s.attr("visibility", "hidden")
@@ -628,8 +623,6 @@
                     tweet_button = click(".tweets", tweet_button);
                 }
 
-                // mkbutton("gray", key_xpos, 3/20 * height)
-
                 var rect_height = Math.floor((2*key_width + key_gap)/1.2),
                     rect_width = 2*key_width + key_gap;
                     rad = key_width + key_gap/2;
@@ -643,6 +636,7 @@
                         .attr("stroke", "black")
                         .attr("stroke-width", 1)
                     grect.append("rect")
+                        .attr("class", "button")
                         .attr("cursor", "pointer")
                         .attr("x", key_xpos)
                         .attr("y", key_ypos - 3*key_gap - rect_height)
@@ -652,9 +646,8 @@
                         .attr("fill-opacity", shadow_opacity)
                         .on("click", shadowClick);
                     
-
-
                 button.append("circle")
+                    .attr("class", "button")
                     .attr("cursor", "pointer")
                     .attr("cx", window_c)
                     .attr("cy", key_ypos - 6*key_gap - rect_height - rad)
