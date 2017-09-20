@@ -1801,7 +1801,7 @@ CountyCode,Tally,Population,Geoname,Value
 35007,0.058879921576730575,12253,"Colfax County, New Mexico",-1.5252995051086917
 35009,0.24161286679817295,50280,"Curry County, New Mexico",-1.5252995051086917
 35011,0.008615987871303184,1793,"De Baca County, New Mexico",-1.5252995051086917
-35013,11.02933904849316,214207,"DoÒa Ana County, New Mexico",0.8091950014178387
+35013,11.02933904849316,214207,"Do√±a Ana County, New Mexico",0.8091950014178387
 35015,1.2768889219923931,57621,"Eddy County, New Mexico",-0.020676286735129213
 35017,2.135895224205496,28280,"Grant County, New Mexico",1.1863091501271479
 35019,0.021028200181161597,4376,"Guadalupe County, New Mexico",-1.5252995051086917
@@ -3146,30 +3146,30 @@ CountyCode,Tally,Population,Geoname,Value
 72005,0.0,54582,"Aguadilla Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72007,0.0,26471,"Aguas Buenas Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72009,0.0,23605,"Aibonito Municipio, Puerto Rico Commonwealth",-2.340115683500046
-72011,0.0,27540,"AÒasco Municipio, Puerto Rico Commonwealth",-2.340115683500046
+72011,0.0,27540,"A√±asco Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72013,0.0,87939,"Arecibo Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72015,0.0,18236,"Arroyo Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72017,0.0,24467,"Barceloneta Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72019,0.0,28977,"Barranquitas Municipio, Puerto Rico Commonwealth",-2.340115683500046
-72021,0.0,184374,"BayamÛn Municipio, Puerto Rico Commonwealth",-2.340115683500046
+72021,0.0,184374,"Bayam√≥n Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72023,0.0,49361,"Cabo Rojo Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72025,0.0,132164,"Caguas Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72027,0.0,32434,"Camuy Municipio, Puerto Rico Commonwealth",-2.340115683500046
-72029,0.0,46477,"CanÛvanas Municipio, Puerto Rico Commonwealth",-2.340115683500046
+72029,0.0,46477,"Can√≥vanas Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72031,0.0,158457,"Carolina Municipio, Puerto Rico Commonwealth",-2.340115683500046
-72033,0.0,24968,"CataÒo Municipio, Puerto Rico Commonwealth",-2.340115683500046
+72033,0.0,24968,"Cata√±o Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72035,0.0,44796,"Cayey Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72037,0.0,11937,"Ceiba Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72039,0.0,17021,"Ciales Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72041,0.0,40599,"Cidra Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72043,0.0,39558,"Coamo Municipio, Puerto Rico Commonwealth",-2.340115683500046
-72045,0.0,19699,"ComerÌo Municipio, Puerto Rico Commonwealth",-2.340115683500046
+72045,0.0,19699,"Comer√≠o Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72047,0.0,34408,"Corozal Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72049,0.0,1797,"Culebra Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72051,0.0,37536,"Dorado Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72053,0.0,32219,"Fajardo Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72054,0.0,11988,"Florida Municipio, Puerto Rico Commonwealth",-2.340115683500046
-72055,0.0,16897,"Gu·nica Municipio, Puerto Rico Commonwealth",-2.340115683500046
+72055,0.0,16897,"Gu√°nica Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72057,0.0,42063,"Guayama Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72059,0.0,19125,"Guayanilla Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72061,0.0,89307,"Guaynabo Municipio, Puerto Rico Commonwealth",-2.340115683500046
@@ -3179,35 +3179,35 @@ CountyCode,Tally,Population,Geoname,Value
 72069,0.0,53895,"Humacao Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72071,0.0,42744,"Isabela Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72073,0.0,14984,"Jayuya Municipio, Puerto Rico Commonwealth",-2.340115683500046
-72075,0.0,47309,"Juana DÌaz Municipio, Puerto Rico Commonwealth",-2.340115683500046
+72075,0.0,47309,"Juana D√≠az Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72077,0.0,39477,"Juncos Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72079,0.0,23434,"Lajas Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72081,0.0,26629,"Lares Municipio, Puerto Rico Commonwealth",-2.340115683500046
-72083,0.0,8645,"Las MarÌas Municipio, Puerto Rico Commonwealth",-2.340115683500046
+72083,0.0,8645,"Las Mar√≠as Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72085,0.0,38049,"Las Piedras Municipio, Puerto Rico Commonwealth",-2.340115683500046
-72087,0.0,26583,"LoÌza Municipio, Puerto Rico Commonwealth",-2.340115683500046
+72087,0.0,26583,"Lo√≠za Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72089,0.0,18660,"Luquillo Municipio, Puerto Rico Commonwealth",-2.340115683500046
-72091,0.0,39941,"ManatÌ Municipio, Puerto Rico Commonwealth",-2.340115683500046
+72091,0.0,39941,"Manat√≠ Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72093,0.0,5786,"Maricao Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72095,0.0,11074,"Maunabo Municipio, Puerto Rico Commonwealth",-2.340115683500046
-72097,0.0,77748,"Mayag¸ez Municipio, Puerto Rico Commonwealth",-2.340115683500046
+72097,0.0,77748,"Mayag√ºez Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72099,0.0,37117,"Moca Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72101,0.0,31603,"Morovis Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72103,0.0,26448,"Naguabo Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72105,0.0,28805,"Naranjito Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72107,0.0,21529,"Orocovis Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72109,0.0,17472,"Patillas Municipio, Puerto Rico Commonwealth",-2.340115683500046
-72111,0.0,21117,"PeÒuelas Municipio, Puerto Rico Commonwealth",-2.340115683500046
+72111,0.0,21117,"Pe√±uelas Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72113,0.0,145278,"Ponce Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72115,0.0,24201,"Quebradillas Municipio, Puerto Rico Commonwealth",-2.340115683500046
-72117,0.0,14380,"RincÛn Municipio, Puerto Rico Commonwealth",-2.340115683500046
-72119,0.0,51009,"RÌo Grande Municipio, Puerto Rico Commonwealth",-2.340115683500046
+72117,0.0,14380,"Rinc√≥n Municipio, Puerto Rico Commonwealth",-2.340115683500046
+72119,0.0,51009,"R√≠o Grande Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72121,0.0,23163,"Sabana Grande Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72123,0.0,28846,"Salinas Municipio, Puerto Rico Commonwealth",-2.340115683500046
-72125,0.0,32321,"San Germ·n Municipio, Puerto Rico Commonwealth",-2.340115683500046
+72125,0.0,32321,"San Germ√°n Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72127,0.0,347052,"San Juan Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72129,0.0,38174,"San Lorenzo Municipio, Puerto Rico Commonwealth",-2.340115683500046
-72131,0.0,38202,"San Sebasti·n Municipio, Puerto Rico Commonwealth",-2.340115683500046
+72131,0.0,38202,"San Sebasti√°n Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72133,0.0,22277,"Santa Isabel Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72135,0.0,73980,"Toa Alta Municipio, Puerto Rico Commonwealth",-2.340115683500046
 72137,0.0,80207,"Toa Baja Municipio, Puerto Rico Commonwealth",-2.340115683500046
