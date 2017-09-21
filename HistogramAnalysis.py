@@ -1,19 +1,21 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import json
 
 def getPopData():
     '''
     USAGE: Get population data and put it in a dataframe.
     RETURN: cd_df - census dataframe with 'POP', 'GEONAME', and 'CountyCode' columns 
     '''
-    with open(tweets.censusdatafile, 'r') as cdf:
+    censusdatafile = 'Resources/censusdata.json'
+    with open(censusdatafile, 'r') as cdf:
         censusdata = json.load(cdf)
 
     cd_df = pd.DataFrame(censusdata[1:])
     cd_df.columns = censusdata[0]
     cd_df.loc[:,'CountyCode'] = cd_df['state'] + cd_df['county']
     cd_df = cd_df.drop(['DATE', 'state', 'county'], axis = 1)
-    print('Census data loaded from "%s"...' % tweets.censusdatafile)
+    print('Census data loaded from "%s"...' % censusdatafile)
 
     return cd_df
 
@@ -101,7 +103,7 @@ def histNorm(histlist, scale, bins, featscaled=None, name=None):
     else:
         featScaledLabels()
     
-    n, bins, patches = plt.hist(histlist, color='lightgray', bins=bins, figsize)
+    n, bins, patches = plt.hist(histlist, color='lightgray', bins=bins)
     
     if name:
         plt.savefig(name, dpi=200)
