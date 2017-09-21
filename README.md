@@ -105,7 +105,7 @@ With this distribution employed, a [plot emerges][tweet_choropleth_3a] which ret
 
 By using [regexes](https://en.wikipedia.org/wiki/Regular_expression) to extract relevant information from the eclipse path datasheet published by NASA, then converting their degrees-decimal-minutes coordinate system to GeoJSON-compatible decimal degrees, I created [a GeoJSON][eclispeGeoJSON] encoding of both the centerline of totality and the northern- and southern-most regions of totality. 
 
-<svg class="leaflet-zoom-animated" width="1019" height="521" viewBox="-20 -10 1019 521" style="transform: translate3d(-20px, -10px, 0px);"><g><path stroke-linejoin="round" stroke-linecap="round" stroke="#4078c0" stroke-opacity="0.5" stroke-width="1.5" fill="none" class="leaflet-clickable" d="M136 174L222 156L272 150L321 147L387 150L425 156L451 162L487 173L542 196L586 220L661 268L736 311L766 326L797 339L848 356"></path></g><g><path stroke-linejoin="round" stroke-linecap="round" fill-rule="evenodd" stroke="#4078c0" stroke-opacity="0.5" stroke-width="1.5" fill="#4078c0" fill-opacity="0.2" class="leaflet-clickable" d="M126 174L197 158L237 151L308 144L369 145L424 152L451 158L482 167L534 188L592 219L682 277L745 313L814 343L853 356L843 357L807 345L747 320L714 303L668 276L609 238L563 211L527 193L475 173L451 166L425 160L380 153L353 151L300 151L244 156L206 162L144 175z"></path></g></svg>
+![EclipseGeoJSONPreview]
 
 The most difficult part of this process was actually getting the shape to render properly in the SVG with the rest of my Geo/TopoJSON objects. The US county path data is encoded in TopoJSON pre-projected into the Albers USA projection, while the tweet point data is encoded in GeoJSON with no projection. Since the Albers USA projection pulls Alaska and Hawaii from their proper positions to fit nicely in the image (as well as scaling Alaska by a factor of 1/3), the tweet GeoJSON also needed to be projected into Albers USA. However, the eclipse path had to be projected into plain Albers, otherwise it would be cut off shortly after crossing into the oceans on either side of the country. Getting all three projections to match up amounted to a bit of educated guess and check until each data set was properly aligned.
 
@@ -131,6 +131,7 @@ Here are some outlines of the data structures I used...[file]
 [Histograms]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/Histograms.png 
 [Histograms_Tally]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/Histograms_Tally.png
 [Histograms_Tally_ro]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/Histograms_Tally_ro.png 
+[EclipseGeoJSONPreview]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/EclipseGeoJSONPreview.png 
 
 [hover text]:
 
