@@ -6,7 +6,6 @@ import numpy as np                         # for numerical analysis
 import json                                # for JSON processing
 import pandas as pd                        # for dataframe processing
 import requests                            # for API interactions
-import matplotlib.pyplot as plt            # for plotting data
 from datetime import datetime, timedelta   # for analysis of temporal data features
 from tqdm import tqdm                      # for monitoring progress of time-consuming for-loops
 
@@ -490,9 +489,10 @@ class TweetDF():
         if 'CountyCode' not in self.df.keys():
             self.countyExtract()
         
-        self.time_params = '_d%d_delta%d' % (increment, block_length)
+        self.time_params = '_d%s_delta%s' % (str(increment), str(block_length))
         filename = self.timetallyroot.split('.')[0] + self.time_params + '.json'
         
+        print('Loading tally data from "%s"...' % filename)
         if os.path.exists(filename): # just load tally data from file
             with open(filename, 'r') as f:
                 self.county_tally = json.load(f)
@@ -526,7 +526,7 @@ class TweetDF():
             # Initialize all county code tallies at []
             self.county_tally = dict.fromkeys(cd_list,[])
 
-            # Format dt and deltaT as deltatime objects
+            # Format dt and deltaT as timedelta objects
             dt = timedelta(0, increment*60)
             deltaT = timedelta(0, block_length*60)
 
@@ -623,7 +623,7 @@ class TweetDF():
         USAGE: 
         Converts tally counts to color values (i.e. values for use in color mapping) by scaling
         as a function of county population. 
-        
+                
         THEORETICAL BACKGROUND: 
         Since the distribution of population size among counties is roughly log-normal, a simple 
         mapping of {f(tally) --> f(tally/pop)} would result in a uniform distribution if tally counts 
@@ -680,6 +680,8 @@ class TweetDF():
                 mu = np.mean(list_noFalse)                  # mean
                 sigma = np.std(list_noFalse)                # standard deviation
                 minimum = min((list_noFalse - mu)/sigma)    # minimum color value
+                print('   mu = %f' % mu)
+                print('sigma = %f' % sigma)
                 
                 # mean normalization and feature scaling
                 shape = np.shape(v_array)
@@ -815,24 +817,27 @@ class TweetDF():
         This method fully processes and analyzes the TweetDF object.
         '''
         
-        self.tweetfile2df()    # generates tweet dataframe "self.df" from data in datafilepath
-        self.mkDatetime()      # changes "CREATED AT" info into datetime-formatted info and places in "Datetime" column
-        self.stateNoState()    # determines whether a tweet only has state-level location precision
-        self.avgLONLAT()       # averages bbox coordinates and adds to self.df
-        self.listLATLON()      # generates [LAT, LON] pairs and adds the pair lists to self.df 
-        self.revGeocodePOST()  # submits POST requests to retrieve politics data on coordinates in self.df
-        self.countyExtract()   # adds county codes and tally distributions to self.df
+        self.tweetfile2df()     # generates tweet dataframe "self.df" from data in datafilepath
+        self.mkDatetime()       # changes "CREATED AT" info into datetime-formatted info and places in "Datetime" column
+        self.stateNoState()     # determines whether a tweet only has state-level location precision
+        self.avgLONLAT()        # averages bbox coordinates and adds to self.df
+        self.listLATLON()       # generates [LAT, LON] pairs and adds the pair lists to self.df 
+        self.revGeocodePOST()   # submits POST requests to retrieve politics data on coordinates in self.df
+        self.countyExtract()    # adds county codes and tally distributions to self.df
         
-        self.timeTally(2, 60)  # tallies up time series of tweets/county; adds "CountyCode" and "Tally" to self.tallyframe
-        self.getCountyPop()    # gets county population info from US Census Bureau and adds it to self.df
-        self.tally2value()     # converts tally counts to color-mapping values assuming an initial log-norm distribution
-        self.df2GeoJSON()      # generates GeoJSON file of tweet events from tweet dataframe
+        self.timeTally(0.5, 60) # tallies up time series of tweets/county; adds "CountyCode" and "Tally" to self.tallyframe
+        self.getCountyPop()     # gets county population info from US Census Bureau and adds it to self.df
+        self.tally2value()      # converts tally counts to color-mapping values assuming an initial log-norm distribution
+        self.df2GeoJSON()       # generates GeoJSON file of tweet events from tweet dataframe
         
         print('Analysis complete.')
         
 ##### -------------------------------------------- MAIN -------------------------------------------- ##### 
-        
-datafilepath = "Twitter Data/eclipsefile1.json" 
 
-tweets = TweetDF(datafilepath)  # initialize TweetDF object as "tweets"
-tweets.analyze()
+def main():
+    datafilepath = "Twitter Data/eclipsefile1.json" 
+    tweets = TweetDF(datafilepath)  # initialize TweetDF object as "tweets"
+    tweets.analyze()
+
+if __name__ == '__main__':
+    main()
