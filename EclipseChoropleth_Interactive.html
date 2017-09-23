@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+
+<!-- ***** See: https://youtu.be/suNs5p0IxWk ***** -->
+
+<html>
+  <style>
+
+    * {
+        font-family: 
+            "Myriad Pro Light", "Nunito", "Oswald", Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    div #footer {
+        background-color: rgba(210,210,220,0.9);
+        padding: 1% 0;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        padding-left: 1%;
+
+    }
+
+    div #footer a {
+        text-decoration: none;
+        target: _blank;
+    }
+
+    body {
+        background-color: white;
+    }
+    
+    .button:hover {
+        fill-opacity: 0.4;
+    }
+
+    .centered {
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 250%;
+        font-weight: normal;
+    }
+
+    p {
+        position: auto;
+        font-size: 120%;
+        display: inline;
+    }
+
+    svg {
+        display: block;
+        margin: 0 auto;
+        background-color: white;
+    }
+
+  </style>
+  <head>
+    <meta charset = "utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <title>Eclipse Twitter Tracker Choropleth</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,700" rel="stylesheet">
+    <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+    <script src="https://d3js.org/topojson.v2.min.js"></script>
+
+  </head>
+  <body>
+    <div class="container">
+        <div id="image"></div>
+
+        <!-- Creator Info -->
+        <div id="footer">
+            <p><b>Created by:</b> <a href="https://github.com/chrismbryant" target="_blank">Christopher M. Bryant</a>, 2017</br></p>
+            <p><i>(with data collected from <a href="https://dev.twitter.com/streaming/overview" target="_blank">Twitter's Streaming API</a>, <a href="https://eclipse.gsfc.nasa.gov/SEpath/SEpath2001/SE2017Aug21Tpath.html" target="_blank">NASA</a>, and the <a href="https://www.census.gov/data/developers/data-sets/popest-popproj/popest.html" target="_blank">US Census Bureau</a>)</i></p>
+        </div>
+        
+        <!-- Build SVG -->
+        <script>
+
+        var footer_h = document.getElementById("footer").clientHeight;
+        var inner_h = window.innerHeight;
+        var image_h = inner_h;
+
+        d3.select("#image")
+            .append("svg");
+
+        var svg = d3.select("svg"),
+            
+            width = screen.availWidth,
+            height = image_h,
+
+            zoom_low = 0.5,   // lowest zoom magnification
+            zoom_high = 20; // highest zoom magnification
+
+        svg.attr("class", "mysvg")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("fill", "none")
+            .attr("stroke", "none");
+
+        // defining variables for color-scaling
+        var low_color = "rgb(200, 211, 234)",  // color for lowest tweet fraction "rgb(200, 211, 234)"
+            high_color = "rgb(8,48,107)",      // color for highest tweet fraction
+            low_pop_color = "white",           // color for lowest population density
+            high_pop_color = "rgb(130,0,0)",   // color for highest population density 
+            border_color = "rgb(240,240,240)", // color for county borders
+            s_num = 2,                         // no. of std devs to span with color
+            color_domain = [-s_num, s_num];    // min and max color mapping value
+        
+        // defining button state variables for layer toggling
+        var shadow_button 
+            = blue_button
+            = red_button
+            = tweet_button
+            = false;
+
+        var pop_color = d3.scaleLinear()
+            .domain(color_domain)
+            .range([low_pop_color, high_pop_color]);
+
+        var county_color = d3.scaleLinear()
+            .domain(color_domain)
+            .range([low_color, high_color]);
+        
+        // eclipseData
+        var eclipseData = d3.map();
+
+        // Group all the map stuff together
+        var g = svg.append("g") 
+            .attr("class", "map")
+
+        // -------------------------------- TITLE ------------------------------- //
+
+            title_y = 85
+            g.append("text")
+                .attr("class", "h1")
+                .attr("text-anchor", "middle")
+                .attr("x", width/2)
+                .attr("y", title_y)
+                .attr("fill", "black")
+                .attr("font-size", 32)
+                .attr("font-weight", "bold")
+                .text("The Great American Eclipse on Twitter");
+
+            g.append("text")
+                .attr("id", "clock")
+                .attr("class","h1")  
+                .attr("text-anchor", "middle")
+                .attr("x", width/2) 
+                .attr("y", title_y + 30) 
+                .attr("fill", "black")
+                .attr("font-size", 20)
+                .text("Mon Aug 2017 08:00:00-14:00:00 GMT-0700 (PDT)");
+
+        // ----------------------- ASYNCHRONOUSLY LOAD DATA --------------------- //
+
+            // Create loading_icon
+            svg.append("text")
+                .attr("class", "h1")
+                .attr("id", "loading_icon")
+                .attr("text-anchor", "middle")
+                .attr("x", width/2)
+                .attr("y", height*3/7)
+                .attr("fill", "black")
+                .attr("font-size", 22)
+                .text("Loading . . .");
+
+            // Loading and callback function structure: 
+            // See https://github.com/kthotav/D3Visualizations/blob/master/New_York_Income_vs_Poverty/js/ny.js
+
+            // load TopoJSON, GeoJSON, and color data file asynchronously (See: https://github.com/d3/d3-queue)
+            d3.queue()
+                .defer(d3.json, "https://d3js.org/us-10m.v1.json")
+                .defer(d3.json, "https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Resources/tweetGeoJSON.json")
+                .defer(d3.json, "https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Resources/eclipseGeoJSON.json")
+                .defer(d3.csv, "https://raw.githubusercontent.com/chrismbryant/twitter-eclipse-tracker/master/Resources/Color/countycolordata_d0_delta360.csv", function(d) {
+                    var Tally = d.Tally.split('[')[1].split(']')[0].split(',');
+                    var Value = d.Value.split('[')[1].split(']')[0].split(',');
+                    for (t = 0; t < Tally.length; t++) {
+                        Tally[t] = +Tally[t]
+                        Value[t] = +Value[t]
+                    }
+                    eclipseData.set(d.CountyCode, 
+                        [d.CountyCode, Tally, +d.Population, d.Geoname, Value]); 
+                })
+                .await(ready);
+
+        // callback function (do this after retrieving all the data) 
+        function ready(error, topoData, tweetGeoJSON, eclipseGeoJSON) {
+
+            if (error) throw error;
+
+            // Turn off loading_icon
+            svg.select("#loading_icon")
+                .attr("fill-opacity", 0);
+
+            // ----------------------------- STORE DATA ----------------------------- //
+
+                // Load US county TopoJSON (already encoded with Albers projection)
+                var us_counties = topojson.feature(topoData, {
+                    type: "GeometryCollection",
+                    geometries: topoData.objects.counties.geometries
+                });
+
+                // Load tweet GeoJSON
+                var tweets = {
+                    "type": tweetGeoJSON.type,
+                    "features": tweetGeoJSON.features
+                };
+
+                var eclipse = {
+                    "type": eclipseGeoJSON.type,
+                    "features": eclipseGeoJSON.features
+                }
+
+            // ------------------------- SET UP PROJECTIONS ------------------------- //
+                
+                // Custom translation projection, since our TopoJSON file appears to 
+                // already encoded with Albers USA projection. Noramlly, we would set 
+                // our corresponding projection to "null", but since we want to more 
+                // precisely position the map in svg, we'll need to apply some 
+                // translations. (See: https://bl.ocks.org/mbostock/5663666)
+
+                function trans(dx, dy) {
+                  return d3.geoTransform({
+                    point: function(x, y) {
+                      this.stream.point(x + dx, y + dy);
+                    }
+                  });
+                }
+
+                var x_shift = (width-960)/2,
+                    y_shift = 90; // (height-680)/2
+
+                var geoPath = d3.geoPath()
+                    .projection(trans(x_shift, y_shift));
+
+                // Use the USA Albers projection to map the GeoJSON tweet data
+                var proj = d3.geoAlbersUsa()
+                    .scale(1280) // [How do we know what this number is? I just guessed correctly.]
+                    .translate(
+                        [1152*5/12 + x_shift, // width * 5/12
+                        600/2 + y_shift]);  // height/2
+
+                // This projection won't crop off the ends of the eclipse path
+                var proj_2 = d3.geoAlbers()
+                    .scale(1280)
+                    .translate([1152*5/12 + x_shift, 600/2 + y_shift]);
+
+                var tweetPath = d3.geoPath()
+                    .projection(proj);
+
+                var eclipsePath = d3.geoPath()
+                    .projection(proj_2);
+               
+            // ------------------------------- NATION ------------------------------- //
+                // See: https://bl.ocks.org/mbostock/4136647
+
+                // Add a soft shadow around the nation border
+                var gnation = g.append("g");
+                
+                svg.append("filter")
+                    .attr("id", "blur")
+                    .append("feGaussianBlur")
+                        .attr("stdDeviation", 5);
+
+                gnation.attr("class", "nation")
+                    .append("path")
+                    .attr("class", "nation-shadow")
+                    .datum(topojson.mesh(topoData, topoData.objects.nation))
+                    .attr("d", geoPath)
+                    .attr("fill", "black")
+                    .attr("fill-opacity", 0.4)
+                    .attr("filter", "url(#blur)");
+
+                gnation.append("path")
+                    .attr("class", "nation-background")
+                    .datum(topojson.mesh(topoData, topoData.objects.nation))
+                    .attr("d", geoPath)
+                    .attr("fill", "black");
+
+            // ---------------------- COUNTY POPULATION DENSITY --------------------- //
+
+                // Dictionary and list of county population densities
+
+                var getDensity = () => {
+                    var density = {};
+                    for (var i in us_counties.features) {
+                        var county = eclipseData.get(us_counties.features[i].id)[0],
+                            area = geoPath.area(us_counties.features[i]),
+                            pop = eclipseData["$" + county][2];
+                        density[county] = pop/area;
+                    }
+                    return density; 
+                }
+
+                var dict2val = (dictionary) => {
+                    var val_list = [];
+                    for (var key in dictionary) {
+                        val_list.push(dictionary[key]);
+                    }
+                    return val_list;
+                }
+                
+                var density = getDensity();
+                var density_list = dict2val(density);            
+                
+                // Define a bunch of math functions for arrays.
+
+                    var sum = (mylist) => {
+                        s = 0;
+                        for (var i in mylist) {s += mylist[i]}
+                        return s;
+                    }
+
+                    var pow = (mylist, exp) => {
+                        p = [];
+                        for (var i in mylist) {p.push(Math.pow(mylist[i],exp))}
+                        return p;
+                    }
+
+                    var add = (mylist, addend) => {
+                        a = [];
+                        for (var i in mylist) {a.push(mylist[i] + addend)}
+                        return a;
+                    }
+
+                    var prod = (mylist, factor) => {
+                        p = [];
+                        for (var i in mylist) {p.push(mylist[i] * factor)}
+                        return p;
+                    }
+                    
+                    var mean = (mylist) => {
+                        return mu = sum(mylist) / mylist.length;
+                    }
+
+                    var std = (mylist) => {
+                        var s = sum(pow(add(mylist,-mean(mylist)), 2));
+                        return sigma = Math.pow(s/mylist.length, 0.5);
+                    }
+
+                    var logremove = (mylist) => {
+                        l = [];
+                        for (var i in mylist) {
+                            if (mylist[i]) {
+                                l.push(Math.log(mylist[i]));
+                            }
+                        }
+                        return l;
+                    }
+
+                // Calculate mean and std of density info for proper color mapping
+                var density_prelist = logremove(density_list);
+                density_list = [];
+                // get rid of the terms that blew up to infinity
+                for (i = 0; i < density_prelist.length; i++) {
+                    var v = density_prelist[i];
+                    if (1E-9 < v && v < 1E9) {
+                        density_list.push(v);
+                    } 
+                }
+                var mu = mean(density_list);
+                var sigma = std(density_list);
+
+                // Recalculate density with normalized and scaled values
+                var renormdensity = {}
+                for (var key in density) {
+                    if (Math.log(density[key]) > -1E9) {
+                        renormdensity[key] = (Math.log(density[key]) - mu) / sigma;
+                    }
+                }
+
+                // US counties red population layer
+                g.append("g")
+                    .attr("class", "county-pop")
+                    .selectAll("path")
+                    .data(us_counties.features)
+                    .enter()
+                    .append("path")
+                        .attr("class", "county-pop-path")
+                        .attr("d", geoPath)
+                        .attr("pointer-events", "visibleFill")
+                        .attr("stroke", border_color)
+                        .attr("stroke-width", 0.2)
+                        .attr("fill", function(d) {
+                            var county = eclipseData.get(d.id)[0];
+                            return (county ? pop_color(renormdensity[county]) : low_pop_color);
+                        })
+
+                        .on("mouseover", function(d) {
+                            d3.select(this).transition()
+                                .duration(25)
+                                .attr("fill-opacity", 0)
+                        })
+
+                        .on("mouseout", function(d){
+                            d3.select(this).transition()
+                                .ease(d3.easeQuadInOut)
+                                .duration(400)
+                                .attr("fill-opacity", max_fill_opacity)
+                        })
+
+                    .append("title")
+                        .text(function(d) {
+                            return d.name = eclipseData.get(d.id)[3] + "\n"
+                                + "Population: " + eclipseData.get(d.id)[2];
+                        });
+
+            // -------------------------- COUNTY TWEET DATA ------------------------- //
+
+                var block = 0;
+                var blocks = eclipseData['$01001'][1].length;
+
+                // US counties border and fill (fill is bound to eclipse data)
+                var max_fill_opacity = 1;
+                g.append("g")
+                    .attr("class", "counties")
+                    .selectAll("path")                // returns an array of <path>...</path> elements in g
+                    .data(us_counties.features)       // assigns keys (bind data to array)
+                    .enter()                          // for each row in data...
+                    .append("path")                   // create new <path>...</path> elements
+                        .attr("class", "county-tweet-path") // assigns class attribute "county-tweet-path" to each <path> element
+                        .attr("d", geoPath)           // assigns attribute d to each <path> element
+                        .attr("stroke", border_color)
+                        .attr("stroke-width", 0.05)
+                        .attr("stroke-linejoin", "round")
+                        .attr("fill-opacity", max_fill_opacity)
+                        
+                        .attr("fill", function(d) {
+                            var Value = eclipseData.get(d.id)[4][block];
+                            return (Value ? county_color(Value) : low_color);
+                        })
+
+                        .on("mouseover", function(d) {
+                            d3.select(this).transition()
+                                .duration(25)
+                                .attr("fill-opacity", 0)
+                        })
+
+                        .on("mouseout", function(d){
+                            d3.select(this).transition()
+                                .ease(d3.easeQuadInOut)
+                                .duration(400)
+                                .attr("fill-opacity", max_fill_opacity)
+                        })
+
+                    // us_counties title (label counties with tweet data)
+                    .append("title")
+                        .text(function(d) {
+                            return d.name = eclipseData.get(d.id)[3] + "\n"
+                                + "# of Tweets: " + eclipseData.get(d.id)[1][block] + "\n"
+                                + "Population: " + eclipseData.get(d.id)[2];
+                        });
+                    
+            // ------------------------------- STATES ------------------------------- //
+
+                // US states border
+                g.append("g")
+                    .attr("class", "states")
+                    .append("path")
+                    .attr("class", "state-path")
+                    .datum(topojson.mesh(topoData, topoData.objects.states))
+                    .attr("d", geoPath)
+                    .attr("stroke", "white")
+                    .attr("stroke-width", 1);
+
+            // ---------------------------- ECLIPSE PATH ---------------------------- //
+                // Data retrieved from: https://eclipse.gsfc.nasa.gov/SEpath/SEpath2001/SE2017Aug21Tpath.html
+
+                // Eclipse path
+                var center_opacity = 1,
+                    shadow_opacity = 0.2 * center_opacity;
+
+                var gg = g.append("g")
+                    gg.attr("class", "eclipse-path")
+                    .attr("pointer-events", "none") // Makes the layer intangible
+
+                    .append("g")
+                        .attr("class", "center-line")
+                        .append("path")
+                        .attr("class", "shadow")
+                        .datum(eclipse.features[0])
+                        .attr("d", eclipsePath)
+                        .attr("stroke", "black")
+                        .attr("stroke-width", 1)
+                        .attr("stroke-opacity", center_opacity); // 0.4
+
+                    gg.append("g")
+                        .attr("class", "totality-band")
+                        .append("path")
+                        .attr("class", "shadow")
+                        .datum(eclipse.features[1])
+                        .attr("d", eclipsePath)
+                        .attr("fill", "black")
+                        .attr("fill-opacity", shadow_opacity);
+
+                shadowClick(); // default eclipse path layer to OFF
+
+            // ------------------------------- TWEETS ------------------------------- //
+                
+                // Draw a dot at each tweet location
+
+                var point_radius = 1 // 1
+                var point_opacity = 0.6 // 0.6
+
+                g.append("g")
+                    
+                    .attr("class", "tweet-points")
+                    .selectAll("tweet-points")
+                    .data(tweets.features)
+                    .enter()
+
+                    // link the tweet points to the actual published tweets
+                    .append("a")
+                        .attr("href", function(d, i){
+                            var content = tweets.features[i].properties;
+                            return "https://twitter.com/search?l=&q=eclipse%2C%20OR%20sun%20from%3A" + 
+                                content.User + "%20since%3A2017-08-21%20until%3A2017-08-22&src=typd&lang=en";
+                        })
+                        .attr("target", "_blank")
+
+                    .append("path")
+                    .attr("class", "tweets")
+                    .attr("d", tweetPath.pointRadius(point_radius))
+                    .attr("fill", "rgb(0, 172, 237)")
+                    .attr("fill-opacity", point_opacity)
+
+                    .on("mouseover", function(d) {
+                        d3.select(this).transition()
+                            .ease(d3.easeQuadInOut)
+                            .duration(25)
+                            .attr("fill-opacity", 1)
+                            .attr("stroke", "white")
+                            .attr("stroke-width", 1)
+                            .attr("d", tweetPath.pointRadius(3 * point_radius))
+                    })
+
+                    .on("mouseout", function(d){
+                        d3.select(this).transition()
+                            .ease(d3.easeQuadInOut)
+                            .duration(100)
+                            .attr("fill-opacity", point_opacity)
+                            .attr("stroke", "none")
+                            .attr("d", tweetPath.pointRadius(point_radius))
+                    })
+
+                    // label individual tweets
+                    .append("title")
+                        .text(function(d, i) {
+                            var content = tweets.features[i].properties;
+                            return content.Place[1] + "\n" 
+                                + "Time: " + content.Datetime + " UTC\n"
+                                + "User: " + content.User + "\n"
+                                + "Text: " + content.Text + "\n";
+                        });
+
+                tweetClick(); // default tweet point layer to OFF
+
+            // ------------------------- TRANSLUCENT WINDOW ------------------------- //
+
+                var window_w = 172, 
+                    window_c = width - window_w/2;
+                svg.append("g")
+                    .attr("class", "window")
+                    .append("rect")
+                        .attr("x", window_c - window_w/2)
+                        .attr("y", 0)
+                        .attr("width", window_w)
+                        .attr("height", height - footer_h)
+                        .attr("fill", "white")
+                        .attr("fill-opacity", 0.8)
+
+            // -------------------------- COLOR SCALE BAR --------------------------- //
+                // See https://www.visualcinnamon.com/2016/05/smooth-color-legend-d3-svg-gradient.html
+
+                //Append a definition element to our SVG
+                var defs = svg.append("defs");
+
+                // Append linearGradient element to definitions with unique id
+                var linGradElement = (id) => {
+                    return element = defs.append("linearGradient")
+                        .attr("id", id)
+                }
+
+                // Vertical gradient attributes
+                var vertAttrs = {
+                    "x1": "0%",
+                    "y1": "100%",
+                    "x2": "0%",
+                    "y2": "0%",
+                }
+
+                // Set multiple attributes at once
+                function setAttr(element, attrs) {
+                    for (var key in attrs) {
+                        element.attr(key, attrs[key])
+                    }
+                }
+
+                // Set color range
+                function setColorRange(element, low_color, mid_color, high_color) {
+                    element.selectAll("stop")
+                    .data([
+                        {offset:   "0%", color: low_color},
+                        {offset:  "50%", color: mid_color},
+                        {offset: "100%", color: high_color}
+                    ])
+                    .enter().append("stop")
+                    .attr("offset", function(d) {return d.offset;})
+                    .attr("stop-color", function(d) {return d.color;})
+                }
+
+                // Make color key rectangle and fill with gradient
+                function mkRectGrad(buttonFunction, id, [xpos, ypos]) {
+                    color_keys.append("rect")
+                        .attr("id", id)
+                        .attr("class", "button")
+                        .attr("cursor", "pointer")
+                        .on("click", buttonFunction)
+                        .attr("x", xpos)
+                        .attr("y", ypos)
+                        .attr("width", key_width)
+                        .attr("height", rect_height)
+                        .style("fill", "url(#" + id + ")"); 
+                }
+
+                function addKeyTitle(title, [x_off, y_off]) {
+                    color_keys.append("text")
+                        .attr("class","h1")
+                        // transform coordinate system
+                        .attr("transform", "rotate(90)")   
+                        .attr("y", -(key_xpos + x_off))            // -x position
+                        .attr("x", key_ypos + rect_height + y_off) //  y position
+                        .attr("fill", "black")
+                        .attr("font-size", 20)
+                        .text(title);
+                }
+
+                // Set color key location and dimensions
+                var key_width = window_w/8,
+                    rect_height = 256,
+                    key_gap = key_width/4,
+                    key_xpos = window_c-key_gap/2-key_width, 
+                    key_ypos = 600/4;
+
+                var color_keys = svg.append("g")
+                    .attr("class", "color-keys")
+
+                // Make the tweet scalebar
+                var county_s = 3;
+                tweetGrad = linGradElement("tweet-grad");
+                setAttr(tweetGrad, vertAttrs);
+                setColorRange(tweetGrad, county_color(-county_s), county_color(0), county_color(county_s));
+                mkRectGrad(blueClick, "tweet-grad", [key_xpos, key_ypos]);
+                addKeyTitle("Eclipse Tweets / County Pop.", [5, 4]);
+
+                // Make the population density scalebar
+                var pop_s = 2.5;
+                popGrad = linGradElement("pop-grad");
+                setAttr(popGrad, vertAttrs);
+                setColorRange(popGrad, pop_color(-pop_s), pop_color(0), pop_color(pop_s));
+                mkRectGrad(redClick, "pop-grad", 
+                    [key_xpos + key_width + key_gap, key_ypos]);
+                addKeyTitle("Population Density (people/mi²)", [5 + key_width + key_gap, 4]);
+                
+                // Calculate positions of labels for color scale bars:
+
+                // Convert a raw density value to a color value
+                function ro2c(ro, mu, sigma) {
+                    return (Math.log(ro) - mu) / sigma;
+                }
+
+                // Convert a color values to a y-position on scale bar
+                function c2ypos(c, s, y0, h) {
+                    return y0 + (s - c) * h / (2 * s); // s is # of std spanned
+                }
+
+                // ----- Eclipse Tweets / County Population ----- //
+
+                var mu = -10.7, // mu and sigma for "_d0.5_delta60"
+                    sigma = 1.0,
+                    scale_labels = [3E-6, 1E-5, 3E-5, 1E-4, 3E-4]; 
+
+                // plot tweet density color chart labels
+                for (i = 0; i < scale_labels.length; i++) {
+                    var y_pos = c2ypos(ro2c(scale_labels[i], mu, sigma), county_s, key_ypos, rect_height);
+                    color_keys.append("text")
+                        .attr("class","h1")
+                        .attr("x", key_xpos - key_width)
+                        .attr("y", y_pos)
+                        .attr("text-anchor", "middle")
+                        .attr("fill", "black")
+                        .attr("font-size", 13)
+                        .text(scale_labels[i].toExponential());
+                } 
+
+                // ------ Population Density (people/mi²) ------ //
+
+                // To calculate the scale bar for population density, we can use the
+                // fact that LA County (code = 06037) has an area of 4751 mi^2 (and 
+                // has a population of 10137915, according to our dataset); thus it 
+                // has a population density of about 2134 people/mi^2. We calculated
+                // density before by diving population by county path area, so to scale
+                // that up to real area, we can multiply every value by 
+                // 2134/density(code = 06037). From there, we can find the distribution
+                // and calculate the appropriate color/value correspondence.
+
+                var ro = getDensity(),                   // dictionary of path area pop density
+                    ro_list = dict2val(ro),              // list of dictionary values
+                    scale_factor = 2134/ro["06037"];     // ratio between real and path pop density
+                ro_list = prod(ro_list, scale_factor);   // scaled to real area
+                ro_prelist = logremove(ro_list);         // log, with -inf removed
+                
+                // remove other terms that might have blown up
+                ro_list = [];
+                for (i = 0; i < ro_prelist.length; i++) {
+                    var v = ro_prelist[i];
+                    if (1E-9 < v && v < 1E9) {
+                        ro_list.push(v);
+                    } 
+                }
+
+                var ro_mu = mean(ro_list),
+                    ro_sigma = std(ro_list),
+                    ro_labels = [1E0, 1E1, 1E2, 1E3]
+                
+                // plot population density color chart labels
+                for (i = 0; i < ro_labels.length; i++) {
+                    var y_pos = c2ypos(ro2c(ro_labels[i], ro_mu, ro_sigma), pop_s, key_ypos, rect_height);
+                    color_keys.append("text")
+                        .attr("class","h1")
+                        .attr("x", key_xpos + 3*key_width + 3)
+                        .attr("y", y_pos)
+                        .attr("text-anchor", "middle")
+                        .attr("fill", "black")
+                        .attr("font-size", 13)
+                        .text(ro_labels[i].toExponential());
+                } 
+
+            // ------------------------ TOGGLE LAYER BUTTON ------------------------- //
+                            
+                var button = svg.append("g")
+                    .attr("class", "buttons");
+                                
+                function toggleVis(s, button) {
+                    if (button === false) {
+                        s.attr("visibility", "hidden")
+                        return button = true;
+
+                    } else {
+                        s.attr("visibility", "visible")
+                        return button = false;
+                    }
+                }
+
+                function click(my_class, my_button) {
+                    var s = d3.select("svg").select(".map")
+                        .selectAll(my_class);
+                    return my_button = toggleVis(s, my_button);
+                }
+
+                function shadowClick() {
+                    shadow_button = click(".shadow", shadow_button);
+                }
+
+                function blueClick() {
+                    blue_button = click(".county-tweet-path", blue_button);
+                    if (red_button === true) {
+                        red_button = click(".county-pop-path", red_button);
+                    }
+                }
+
+                function redClick() {
+                    if (blue_button === false) {
+                        blue_button = click(".county-tweet-path", blue_button);
+                    } else {
+                        red_button = click(".county-pop-path", red_button);
+                    }
+                }
+                
+                function tweetClick() {
+                    tweet_button = click(".tweets", tweet_button);
+                }
+
+                var rect_height = Math.floor((2*key_width + key_gap)/1.2),
+                    rect_width = 2*key_width + key_gap;
+                    rad = key_width + key_gap/2;
+
+                grect = button.append("g")
+                    grect.append("line")
+                        .attr("x1", key_xpos)
+                        .attr("x2", key_xpos + rect_width)
+                        .attr("y1", key_ypos - 3*key_gap - rect_height/2)
+                        .attr("y2", key_ypos - 3*key_gap - rect_height/2)
+                        .attr("stroke", "black")
+                        .attr("stroke-width", 1)
+                    grect.append("rect")
+                        .attr("class", "button")
+                        .attr("cursor", "pointer")
+                        .attr("x", key_xpos)
+                        .attr("y", key_ypos - 3*key_gap - rect_height)
+                        .attr("height", rect_height)
+                        .attr("width", rect_width)
+                        .attr("fill", "black")
+                        .attr("fill-opacity", shadow_opacity)
+                        .on("click", shadowClick);
+                    
+                button.append("circle")
+                    .attr("class", "button")
+                    .attr("id", "tweet-button")
+                    .attr("cursor", "pointer")
+                    .attr("cx", window_c)
+                    .attr("cy", key_ypos - 6*key_gap - rect_height - rad)
+                    .attr("r", rad)
+                    .attr("fill", "rgb(0, 172, 237)")
+                    .on("click", tweetClick);
+            
+            // ------------------------ ZOOMING CAPABILITIES ------------------------ //
+                // See: https://bl.ocks.org/mbostock/3127661b6f13f9316be745e77fdfb084
+
+                svg.call(d3.zoom()
+                    .scaleExtent([zoom_low, zoom_high])
+                    .on("zoom", zoom_svg));
+                
+                function zoom_svg() {
+                    g.attr("transform", d3.event.transform);
+                }
+
+        }
+
+        </script>
+    </div>
+  </body>
+</html>
