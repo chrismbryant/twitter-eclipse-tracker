@@ -117,6 +117,8 @@ Ideally, if my Twitter dataset were infinite in size, each video frame would con
 
 Here are some outlines of the data structures I used...[file]
 
+![eclipse_choropleth_gif]
+
 [myfirsteclipseplot]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/myfirsteclipseplot.png
 [pop_density_choropleth]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/pop_density_choropleth.png 
 [tweet_choropleth_1a]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/tweet_choropleth_1a.png
@@ -133,7 +135,8 @@ Here are some outlines of the data structures I used...[file]
 [Histograms_Tally_ro]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/Histograms_Tally_ro.png 
 [EclipseGeoJSONPreview]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/EclipseGeoJSONPreview.png 
 [eclipse_choropleth_full_WITH_TWEETS]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/eclipse_choropleth_full_WITH_TWEETS.png
-[eclipse_choropleth_full]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/eclipse_choropleth_full.png 
+[eclipse_choropleth_full]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/eclipse_choropleth_full.png
+[eclipse_choropleth_gif]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Video/eclipse_choropleth_d0.5_delta60_SINGLE_LOOP_smaller.gif
 
 [hover text]:
 
