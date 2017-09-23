@@ -1,4 +1,4 @@
-![tweet_choropleth_3b]
+![eclipse_choropleth_full_WITH_TWEETS]
 
 # Twitter Eclipse Tracker:
 
@@ -132,6 +132,8 @@ Here are some outlines of the data structures I used...[file]
 [Histograms_Tally]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/Histograms_Tally.png
 [Histograms_Tally_ro]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/Histograms_Tally_ro.png 
 [EclipseGeoJSONPreview]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/EclipseGeoJSONPreview.png 
+[eclipse_choropleth_full_WITH_TWEETS]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/eclipse_choropleth_full_WITH_TWEETS.png
+[eclipse_choropleth_full]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/eclipse_choropleth_full.png 
 
 [hover text]:
 
