@@ -136,7 +136,7 @@ Here are some outlines of the data structures I used...[file]
 [EclipseGeoJSONPreview]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/EclipseGeoJSONPreview.png 
 [eclipse_choropleth_full_WITH_TWEETS]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/eclipse_choropleth_full_WITH_TWEETS.png
 [eclipse_choropleth_full]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/eclipse_choropleth_full.png
-[eclipse_choropleth_gif]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Video/eclipse_choropleth_d0.5_delta60_SINGLE_LOOP.gif
+[eclipse_choropleth_gif]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Video/eclipse_choropleth_d0.5_delta60_SINGLE_LOOP_smaller.gif
 
 [hover text]:
 
