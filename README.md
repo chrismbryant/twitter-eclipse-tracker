@@ -1,5 +1,7 @@
 ![eclipse_choropleth_full_WITH_TWEETS]
 
+Click [here][Interactive] for interactive version.
+
 # Twitter Eclipse Tracker:
 
 Inspired by [this Google Trends map](https://www.washingtonpost.com/news/wonk/wp/2017/08/01/the-path-of-the-solar-eclipse-is-already-altering-real-world-behavior/?utm_term=.7e148acf90df) of eclipse searches in the week leading up to the ["Great American Eclipse"](https://en.wikipedia.org/wiki/Solar_eclipse_of_August_21,_2017) of 2017, I decided to see if I could track the path of the moon's shadow as it crossed the continental United States by using only Twitter mentions of the eclipse. 
@@ -137,6 +139,7 @@ Here are some outlines of the data structures I used...[file]
 [eclipse_choropleth_full_WITH_TWEETS]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/eclipse_choropleth_full_WITH_TWEETS.png
 [eclipse_choropleth_full]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/eclipse_choropleth_full.png
 [eclipse_choropleth_gif]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Video/eclipse_choropleth_d0.5_delta60_SINGLE_LOOP_smaller.gif
+[Interactive]: https://rawgit.com/chrismbryant/twitter-eclipse-tracker/master/EclipseChoropleth_Interactive.html
 
 [hover text]:
 
