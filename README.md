@@ -2,6 +2,8 @@
 
 Click [here][Interactive] for an interactive desktop version.
 
+---
+
 # Twitter Eclipse Tracker:
 
 Inspired by [this Google Trends map](https://www.washingtonpost.com/news/wonk/wp/2017/08/01/the-path-of-the-solar-eclipse-is-already-altering-real-world-behavior/?utm_term=.7e148acf90df) of eclipse searches in the week leading up to the ["Great American Eclipse"](https://en.wikipedia.org/wiki/Solar_eclipse_of_August_21,_2017) of 2017, I decided to see if I could track the path of the moon's shadow as it crossed the continental United States by using only Twitter mentions of the eclipse. 
@@ -137,14 +139,14 @@ If you'd like to see the code I wrote for this project, here it is:
 * [TweetDataFrame.py][TweetDataFrame]: for doing the bulk of the data processing
 * [totalityNASA2JSON.py][totalityNASA2JSON]: for generating eclipse path GeoJSON files
 * [EclipseChoropleth_Interactive.html][EclipseChoropleth_Interactive]: for creating the interactive map
-* [](): for creating map video frames
+* [EclipseChoroplethVideo.html][EclipseChoroplethVideo]: for creating map video frames
 
 [EclipseTracker]: https://github.com/chrismbryant/twitter-eclipse-tracker/blob/master/EclipseTracker.ipynb
 [HistogramAnalysis]: https://github.com/chrismbryant/twitter-eclipse-tracker/blob/master/HistogramAnalysis.py
 [TweetDataFrame]: https://github.com/chrismbryant/twitter-eclipse-tracker/blob/master/TweetDataFrame.py
 [totalityNASA2JSON]: https://github.com/chrismbryant/twitter-eclipse-tracker/blob/master/totalityNASA2JSON.py
 [EclipseChoropleth_Interactive]: https://github.com/chrismbryant/twitter-eclipse-tracker/blob/master/EclipseChoropleth_Interactive.html
-
+[EclipseChoroplethVideo]: https://github.com/chrismbryant/twitter-eclipse-tracker/blob/master/EclipseChoroplethVideo.html
 
 [myfirsteclipseplot]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/myfirsteclipseplot.png
 [pop_density_choropleth]: https://raw.githubusercontent.com/chrismbryant/eclipse-twitter-tracker/master/Images/pop_density_choropleth.png 
