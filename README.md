@@ -1,6 +1,6 @@
 ![eclipse_choropleth_full_WITH_TWEETS]
 
-Click [here][Interactive] for an interactive desktop version.
+**Click [here][Interactive] for an interactive desktop version.**
 
 ---
 
